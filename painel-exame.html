@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel Laboratorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f141b; --surface:#151c25; --surface2:#1a2330; --line:#253141; --line2:#2f3d50;
+  --ink:#e8edf3; --ink2:#b4c0ce; --mute:#7d8a9b;
+  --accent:#7aa2d6;
+  --crit:#c9736b; --warn:#c9a15e; --mild:#a9a48a; --ok:#6fa98a;
+  --okband:rgba(111,169,138,.16);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:16px;padding:32px 40px 36px;min-height:100vh;-webkit-font-smoothing:antialiased}
+.num{font-variant-numeric:tabular-nums}
+.serif{font-family:Fraunces,Georgia,serif;font-weight:600;letter-spacing:-.01em}
+.label{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* header */
+header{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;padding-bottom:22px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.eyebrow{display:flex;align-items:center;gap:10px;color:var(--accent);margin-bottom:10px}
+header h1{font-size:34px;line-height:1.1}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:10px;color:var(--ink2);font-size:15px}
+.meta span b{color:var(--mute);font-weight:500;margin-right:6px}
+.badge-fict{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:6px;padding:3px 8px;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--mute);margin-left:12px;vertical-align:middle}
+.kpis{display:flex;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.kpi{background:var(--surface);padding:14px 22px;min-width:132px}
+.kpi .v{font-size:34px;font-weight:600;line-height:1;margin-top:8px}
+.kpi .s{color:var(--mute);font-size:13px;margin-top:4px}
+
+/* layout */
+.grid-top{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;margin-bottom:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:22px 24px}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.card-h h2{font-size:20px}
+
+/* ranking */
+.rank-row{display:grid;grid-template-columns:26px 170px 1fr 70px;align-items:center;gap:12px;height:34px}
+.rank-row .n{color:var(--mute);font-size:14px;text-align:right}
+.rank-row .nm{font-weight:500;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track{position:relative;height:14px}
+.track .axis{position:absolute;left:50%;top:-10px;bottom:-10px;width:1px;background:var(--line2)}
+.track .bar{position:absolute;top:0;height:14px;border-radius:3px;transform:scaleX(0);transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.track .bar.r{transform-origin:left}.track .bar.l{transform-origin:right}
+.ready .track .bar{transform:scaleX(1)}
+.rank-row .pct{font-weight:600;font-size:16px;text-align:right}
+.rank-legend{display:flex;justify-content:space-between;color:var(--mute);font-size:12px;margin:8px 0 0 208px;padding-right:82px}
+
+/* padrão */
+.chain{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:18px}
+.chain div{background:var(--surface2);padding:12px 14px}
+.chain .k{font-size:13px;color:var(--mute)}
+.chain .v{font-size:22px;font-weight:600;margin-top:4px}
+.chain .d{font-size:13px;margin-top:2px}
+.ratio{display:flex;align-items:center;gap:20px;padding:14px 0 18px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.ratio .big{font-size:46px;font-weight:600;color:var(--warn);line-height:1}
+.ratio p{color:var(--ink2);font-size:15px;line-height:1.45}
+.ratio p small{display:block;color:var(--mute);font-size:12px;margin-top:4px}
+.todo{list-style:none;display:grid;gap:10px}
+.todo li{display:flex;align-items:center;gap:12px;color:var(--ink2);font-size:15px}
+.todo li svg{color:var(--accent)}
+
+/* sistemas */
+.systems{display:grid;grid-template-columns:repeat(auto-fit,minmax(540px,1fr));gap:20px;margin-bottom:20px}
+.sys{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 24px 6px;border-top:2px solid var(--c)}
+.sys-h{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.sys-h .ic{width:38px;height:38px;border-radius:8px;border:1px solid var(--line2);display:grid;place-items:center;color:var(--ink2)}
+.sys-h h3{font-size:20px;flex:1}
+.prio{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--c)}
+.prio::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c)}
+.test{padding:14px 0 12px;border-top:1px solid var(--line)}
+.sys-h + .test{border-top:none}
+.test-top{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.test-top .nm{font-weight:500;font-size:17px;flex:1;color:var(--ink)}
+.test-top .val{font-size:26px;font-weight:600}
+.test-top .un{color:var(--mute);font-size:14px;min-width:44px}
+.test-top .dev{font-size:14px;font-weight:600;border:1px solid currentColor;border-radius:6px;padding:2px 8px;min-width:68px;text-align:center}
+.range{padding:10px 0 26px}
+.rb{position:relative;height:12px;background:#1f2a38;border-radius:3px}
+.rb .band{position:absolute;top:0;bottom:0;background:rgba(111,169,138,.28)}
+.rb .tk{position:absolute;top:-4px;bottom:-4px;width:1.5px;background:var(--ok);transform:translateX(-50%)}
+.rb .tk span{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-size:14px;color:var(--mute);white-space:nowrap}
+.rb .mk{position:absolute;top:-8px;bottom:-8px;width:4px;border-radius:2px;transform:translateX(-50%)}
+
+/* normais */
+.normals{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.nrm{background:var(--surface);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.nrm svg{color:var(--ok)}
+.nrm .t{flex:1;color:var(--ink2);font-size:15px}
+.nrm b{font-weight:600}
+.nrm span{color:var(--mute);font-size:12px;margin-left:4px}
+
+.legend{display:flex;gap:18px;color:var(--mute);font-size:13px;align-items:center}
+.legend i{display:inline-block;width:18px;height:10px;border-radius:2px;margin-right:6px;vertical-align:middle}
+footer{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--mute);font-size:13px}
+
+@media (max-width:1150px){.grid-top{grid-template-columns:1fr}.systems{grid-template-columns:1fr}header{grid-template-columns:1fr}}
+@media (max-width:640px){body{padding:16px}.kpis{flex-wrap:wrap}.kpi{min-width:0;flex:1}.rank-row{grid-template-columns:20px 100px 1fr 56px;gap:8px}.rank-legend{margin-left:136px;padding-right:64px}.chain{grid-template-columns:1fr 1fr}.systems{grid-template-columns:1fr}.test-top{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="eyebrow">
+      <svg class="i" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span class="label" style="color:var(--accent)">Pré-consulta &middot; Análise laboratorial</span>
+    </div>
+    <h1 class="serif">Rafael Moura Antunes <span class="badge-fict">DOCUMENTO FICTÍCIO</span></h1>
+    <div class="meta num">
+      <span><b>Idade</b>24 anos, masc.</span>
+      <span><b>Coleta</b>18/11/2026 07:42</span>
+      <span><b>Jejum</b>10 h</span>
+      <span><b>Registro</b>0048-2261</span>
+    </div>
+  </div>
+  <div class="kpis num">
+    <div class="kpi"><div class="label">Alterados</div><div class="v" style="color:var(--crit)" id="k-alt">10</div><div class="s">de 19 analitos</div></div>
+    <div class="kpi"><div class="label">Na faixa</div><div class="v" style="color:var(--ok)" id="k-ok">9</div><div class="s">sem achados</div></div>
+    <div class="kpi"><div class="label">Maior desvio</div><div class="v" style="color:var(--warn)">2,8&times;</div><div class="s">CPK / LSN</div></div>
+  </div>
+</header>
+
+<section class="grid-top">
+  <div class="card ready-target">
+    <div class="card-h">
+      <h2 class="serif">Desvio em relação ao limite de referência</h2>
+      <div class="legend"><span><i style="background:var(--crit)"></i>&ge; 50%</span><span><i style="background:var(--warn)"></i>15–49%</span><span><i style="background:var(--mild)"></i>&lt; 15%</span></div>
+    </div>
+    <div id="rank"></div>
+    <div class="rank-legend"><span>abaixo do mínimo</span><span>acima do máximo</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-h">
+      <h2 class="serif">Padrão laboratorial</h2>
+      <span class="label">Hipótese a correlacionar</span>
+    </div>
+    <div class="chain num">
+      <div><div class="k">CPK</div><div class="v">812</div><div class="d" style="color:var(--crit)">+176%</div></div>
+      <div><div class="k">AST</div><div class="v">71</div><div class="d" style="color:var(--crit)">+78%</div></div>
+      <div><div class="k">LDH</div><div class="v">298</div><div class="d" style="color:var(--warn)">+32%</div></div>
+      <div><div class="k">Creatinina</div><div class="v">1,42</div><div class="d" style="color:var(--warn)">+18%</div></div>
+    </div>
+    <div class="ratio">
+      <div class="big num">1,65</div>
+      <p>Razão AST/ALT (De Ritis). Valor &gt; 1 com CPK elevada favorece origem muscular sobre hepática.
+        <small>71 / 43 U/L</small></p>
+    </div>
+    <div class="label" style="margin-bottom:10px">Pontos para anamnese</div>
+    <ul class="todo">
+      <li><svg class="i" viewBox="0 0 24 24"><path d="M6.5 6.5h11M6.5 17.5h11M4 9v6M20 9v6M2 11v2M22 11v2"/></svg>Exercício intenso nas últimas 72 h</li>
+      <li><svg class="i" viewBox="0 0 24 24"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>Estatinas, suplementos, outras medicações</li>
+      <li><svg class="i" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>Hidratação e diurese</li>
+      <li><svg class="i" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>Repetir CPK e função renal</li>
+    </ul>
+  </div>
+</section>
+
+<section class="systems" id="systems"></section>
+
+<section class="card">
+  <div class="card-h">
+    <h2 class="serif">Dentro da faixa de referência</h2>
+    <span class="label num" id="n-ok"></span>
+  </div>
+  <div class="normals num" id="normals"></div>
+</section>
+
+<footer>
+  <span>Fonte: laudo do Laboratório Vale Azul (fictício), emitido em 19/11/2026. Faixas de referência conforme o próprio laudo.</span>
+  <span>Ferramenta de apoio. Não substitui a avaliação clínica.</span>
+</footer>
+
+<script>
+const SYSTEMS = [
+  {nome:"Muscular", prio:"Alta", cor:"var(--crit)", icon:`<path d="M6.5 6.5h11M6.5 17.5h11M4 9v6M20 9v6M2 11v2M22 11v2M6.5 4v16M17.5 4v16"/>`, testes:[
+    {nm:"CPK (creatinofosfoquinase)", v:812, un:"U/L", lo:32, hi:294},
+    {nm:"AST (TGO)", v:71, un:"U/L", lo:0, hi:40},
+    {nm:"LDH", v:298, un:"U/L", lo:135, hi:225}
+  ]},
+  {nome:"Renal", prio:"Alta", cor:"var(--crit)", icon:`<path d="M12 2v6M12 22v-4"/><path d="M5 8a7 7 0 0 1 14 0v4a7 7 0 0 1-14 0z"/><path d="M9 12h6"/>`, testes:[
+    {nm:"Ureia", v:54, un:"mg/dL", lo:15, hi:45},
+    {nm:"Creatinina", v:1.42, un:"mg/dL", lo:0.70, hi:1.20, dec:2},
+    {nm:"Ácido úrico", v:7.6, un:"mg/dL", lo:3.4, hi:7.0, dec:1}
+  ]},
+  {nome:"Ósseo-metabólico", prio:"Moderada", cor:"var(--warn)", icon:`<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>`, testes:[
+    {nm:"Vitamina D (25-OH)", v:21, un:"ng/mL", lo:30, hi:60}
+  ]},
+  {nome:"Perfil lipídico", prio:"Leve", cor:"var(--mild)", icon:`<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>`, testes:[
+    {nm:"Colesterol total", v:214, un:"mg/dL", lo:0, hi:190},
+    {nm:"LDL", v:138, un:"mg/dL", lo:0, hi:130}
+  ]},
+  {nome:"Hepático", prio:"Leve", cor:"var(--mild)", icon:`<path d="M10 2v7.31M14 9.3V1.99M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0M5.52 16h12.96"/>`, testes:[
+    {nm:"ALT (TGP)", v:43, un:"U/L", lo:0, hi:41}
+  ]}
+];
+const NORMAIS = [
+  ["Hemoglobina","15,1","g/dL"],["Hematócrito","45,2","%"],["Leucócitos","7.900","/mm³"],
+  ["Plaquetas","248.000","/mm³"],["Glicose (jejum)","89","mg/dL"],["HDL","58","mg/dL"],
+  ["Triglicerídeos","92","mg/dL"],["TSH","2,10","µUI/mL"],["Ferritina","186","ng/mL"]
+];
+
+const fmt=(n,d=0)=>n.toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d});
+const desvio=t=>t.v>t.hi?(t.v-t.hi)/t.hi:-(t.lo-t.v)/t.lo;
+const cor=d=>{const a=Math.abs(d);return a>=.5?"var(--crit)":a>=.15?"var(--warn)":"var(--mild)"};
+const sinal=d=>(d>0?"+":"−")+fmt(Math.abs(d)*100)+"%";
+
+/* ranking */
+const all=SYSTEMS.flatMap(s=>s.testes.map(t=>({...t,short:t.nm.replace(/ \(creat.*\)/,"")})));
+all.sort((a,b)=>Math.abs(desvio(b))-Math.abs(desvio(a)));
+const maxDev=Math.max(...all.map(t=>Math.abs(desvio(t))));
+document.getElementById("rank").innerHTML=all.map((t,i)=>{
+  const d=desvio(t),w=Math.sqrt(Math.abs(d)/maxDev)*50,left=d>0?50:50-w;
+  return `<div class="rank-row num"><div class="n">${i+1}</div><div class="nm">${t.short}</div>
+    <div class="track"><div class="axis"></div><div class="bar ${d>0?"r":"l"}" style="left:${left}%;width:${w}%;background:${cor(d)};transition-delay:${i*40}ms"></div></div>
+    <div class="pct" style="color:${cor(d)}">${sinal(d)}</div></div>`;
+}).join("");
+
+/* régua de referência */
+function rangeSVG(t){
+  const d=desvio(t),c=cor(d),dec=t.dec||0,max=Math.max(t.v,t.hi)*1.15;
+  const x=v=>(v/max*100).toFixed(2)+"%";
+  const tick=v=>`<div class="tk" style="left:${x(v)}"><span>${fmt(v,dec)}</span></div>`;
+  return `<div class="rb num">
+    <div class="band" style="left:${x(t.lo)};width:calc(${x(t.hi)} - ${x(t.lo)})"></div>
+    ${t.lo>0?tick(t.lo):""}${tick(t.hi)}
+    <div class="mk" style="left:${x(t.v)};background:${c}"></div>
+  </div>`;
+}
+
+document.getElementById("systems").innerHTML=SYSTEMS.map(s=>{
+  const ts=[...s.testes].sort((a,b)=>Math.abs(desvio(b))-Math.abs(desvio(a)));
+  return `<div class="sys" style="--c:${s.cor}">
+    <div class="sys-h"><div class="ic"><svg class="i" viewBox="0 0 24 24">${s.icon}</svg></div>
+      <h3 class="serif">${s.nome}</h3><span class="prio">Prioridade ${s.prio}</span></div>
+    ${ts.map(t=>{const d=desvio(t),c=cor(d);return `<div class="test">
+      <div class="test-top num"><span class="nm">${t.nm}</span>
+        <span class="val" style="color:${c}">${fmt(t.v,t.dec||0)}</span><span class="un">${t.un}</span>
+        <span class="dev" style="color:${c}">${d>0?"↑":"↓"} ${sinal(d)}</span></div>
+      <div class="range">${rangeSVG(t)}</div></div>`}).join("")}
+  </div>`;
+}).join("");
+
+const check=`<svg class="i" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>`;
+document.getElementById("normals").innerHTML=NORMAIS.map(n=>`<div class="nrm">${check}<span class="t">${n[0]}</span><b>${n[1]}</b><span>${n[2]}</span></div>`).join("");
+document.getElementById("k-alt").textContent=all.length;
+document.getElementById("k-ok").textContent=NORMAIS.length;
+document.getElementById("n-ok").textContent=NORMAIS.length+" analitos";
+requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add("ready")));
+</script>
+</body>
+</html>
